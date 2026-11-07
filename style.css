@@ -1,0 +1,34 @@
+*{box-sizing:border-box}
+:root{color-scheme:dark;--cyan:#35f4ff;--pink:#ff4fe1;--gold:#ffe66d}
+body{margin:0;min-height:100vh;background:radial-gradient(ellipse at 50% 0,#1a3158,#070a14 72%);color:#eafaff;font-family:Arial,sans-serif;display:flex;align-items:center;justify-content:center;padding:16px}
+.shell{width:min(100%,1000px)}header{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:12px}
+.brand{font-weight:900;letter-spacing:3px;font-size:16px}.brand b{color:var(--cyan)}.brand small{display:block;color:#90a9c7;font:700 9px monospace;letter-spacing:4px;margin-top:3px}
+.hud{display:flex;gap:12px;flex-wrap:wrap;font:700 10px monospace;letter-spacing:1px;color:#9ab2ca}.hud b{color:var(--cyan)}
+.stage{position:relative;border:1px solid #35f4ff99;border-radius:13px;overflow:hidden;box-shadow:0 0 40px #00dffb25, inset 0 0 30px #00dffb0d}
+canvas{display:block;width:100%;height:auto;background:#080d1c;touch-action:none}
+.overlay{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;padding:14px;background:#030716df;backdrop-filter:blur(5px)}.hidden{display:none!important}
+.panel{width:min(100%,480px);max-height:94%;overflow:auto;padding:clamp(17px,4vw,30px);text-align:center;border:1px solid #35f4ff99;border-radius:15px;background:linear-gradient(145deg,#14213cf7,#090e20f7);box-shadow:0 0 35px #00dffb25}
+.panel small{color:var(--pink);font:700 10px monospace;letter-spacing:3px}
+h1{font-size:clamp(32px,6vw,58px);line-height:.98;margin:15px 0;text-shadow:0 0 20px #35f4ff55}h1 em{color:var(--cyan);font-style:normal}
+h2{color:var(--cyan);font-size:34px;margin:12px}p{color:#bdd0e2;line-height:1.55;font-size:13px}
+button{font:800 11px monospace;letter-spacing:1px;padding:11px 15px;margin:4px;border:1px solid #35f4ff99;border-radius:7px;background:#0c2036;color:var(--cyan);cursor:pointer;transition:.15s}
+button:hover{filter:brightness(1.25);transform:translateY(-1px)}button:active{transform:translateY(1px)}button:disabled{opacity:.4;cursor:not-allowed;transform:none}
+button.primary{display:block;width:100%;background:linear-gradient(90deg,#00cfe5,#278cff);border:0;color:#04101c}
+.button-row{display:flex;gap:6px;justify-content:center;flex-wrap:wrap}.button-row button{flex:1}
+.bestline{font:10px monospace;letter-spacing:1px}.bestline b{color:var(--gold)}
+.left{text-align:left}.shop-panel{width:min(100%,560px)}.shop-items{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:14px 0;text-align:left}
+.shop-item{padding:11px;border:1px solid #2b5571;border-radius:9px;background:#0b1830}.shop-item strong{display:block;color:var(--cyan);font:700 12px monospace}.shop-item p{font-size:11px;margin:5px 0}.shop-item button{width:100%;margin:3px 0 0;padding:9px}
+footer{display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap;margin-top:10px;color:#819ab5;font:9px monospace;letter-spacing:1px}
+.touch{display:none;position:absolute;bottom:8px;left:0;right:0;justify-content:center;gap:4px;pointer-events:none}.touch button{pointer-events:auto;min-height:43px;min-width:40px;margin:0;padding:9px 8px;background:#0b1c32ed;touch-action:none;user-select:none;-webkit-user-select:none}.touch button:active{background:#16476a}
+@media(max-width:700px),(pointer:coarse){body{padding:7px;align-items:flex-start;overscroll-behavior:none}.touch{display:flex;bottom:max(8px,env(safe-area-inset-bottom));gap:3px}.touch button{font-size:8px;min-width:34px;padding:8px 5px}.panel{padding:14px;max-height:87%;}.panel p{font-size:11px}.hud{font-size:9px;gap:7px}.shop-items{grid-template-columns:1fr 1fr}footer{font-size:8px}}
+@media(max-width:420px){.hud{width:100%;justify-content:space-between}.touch button{min-width:31px;padding:8px 4px}.brand{font-size:14px}}
+
+.level-panel{width:min(100%,520px)}.level-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:8px;margin:16px 0}.level-grid button{min-height:58px;margin:0;font-size:12px}.level-grid button span{display:block;font-size:9px;color:#9ab2ca;margin-top:4px}.level-grid button.boss-level{border-color:#ff4fe1;color:#ff8ae9;background:#321333}.level-grid button.boss-level span{color:#ffb5ef}
+@media(max-width:420px){.level-grid{grid-template-columns:repeat(2,1fr)}.level-grid button{min-height:48px}}
+
+.suit-heading{color:#9ab2ca;font:700 11px monospace;letter-spacing:2px;margin:14px 0 8px}.suit-picker{display:grid;grid-template-columns:repeat(4,1fr);gap:7px;margin:8px 0 16px}.suit-choice{margin:0;padding:9px 4px;display:flex;flex-direction:column;align-items:center;gap:5px;font-size:9px;border-color:#31516d;color:#d8efff}.suit-choice.selected{border-color:var(--suit-color);box-shadow:0 0 12px color-mix(in srgb,var(--suit-color),transparent 55%);color:var(--suit-color)}.suit-choice:disabled{opacity:.42}.suit-swatch{width:19px;height:24px;border-radius:5px 5px 3px 3px;background:var(--suit-color);box-shadow:0 0 12px var(--suit-color)}.suit-choice small{font:8px monospace;color:#9ab2ca}
+@media(max-width:420px){.suit-picker{grid-template-columns:repeat(4,1fr)}.suit-choice{font-size:8px;padding:8px 2px}}
+/* Mega upgrade: seeker drones, overdrive and compact mobile controls */
+.touch{flex-wrap:wrap;padding:0 5px}.touch button{min-width:42px}.touch button#boostBtn{border-color:#ffe66d;color:#ffe66d}
+#musicBtn{border-color:#7cff9b;color:#7cff9b}
+@media(max-width:700px),(pointer:coarse){.touch{max-width:100%;row-gap:4px}.touch button{min-width:36px;min-height:40px;font-size:8px}.stage{margin-bottom:3px}}
