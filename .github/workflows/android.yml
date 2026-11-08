@@ -50,8 +50,16 @@ jobs:
           mkdir -p android/app/src/main/assets
           echo "[]" > android/app/src/main/assets/capacitor.plugins.json
 
-      - name: Sync game
-        run: npx cap sync android
+      - name: Copy game assets
+        run: npx cap copy android
+
+      - name: Create plugin registry file
+        run: |
+          mkdir -p android/app/src/main/assets
+          touch android/app/src/main/assets/capacitor.plugins.json
+
+      - name: Update Android plugins
+        run: npx cap update android
 
       - name: Verify Capacitor files
         run: |
