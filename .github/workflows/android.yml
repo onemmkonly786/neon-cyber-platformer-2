@@ -45,6 +45,11 @@ jobs:
       - name: Install Android platform
         run: npm install @capacitor/android@^7.4.3
 
+      - name: Prepare Android assets
+        run: |
+          mkdir -p android/app/src/main/assets
+          echo "[]" > android/app/src/main/assets/capacitor.plugins.json
+
       - name: Sync game
         run: npx cap sync android
 
