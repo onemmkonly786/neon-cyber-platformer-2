@@ -57,8 +57,111 @@ function defeatBoss(){if(!boss)return;const defeated=boss.type,x=boss.x+boss.w/2
 function show(id){['menuScreen','levelSelectScreen','pauseScreen','infoScreen','endScreen','shopScreen','settingsScreen'].forEach(s=>$(s).classList.toggle('hidden',s!==id))}
 function applyControlLayout(){document.querySelectorAll('.touch button').forEach(el=>{const cfg=gameSettings.controls[el.id]||{};el.style.position='absolute';el.style.left=(cfg.x??(el.id==='leftBtn'?2:el.id==='rightBtn'?11:el.id==='dashBtn'?23:el.id==='jumpBtn'?34:el.id==='attackBtn'?45:el.id==='fireBtn'?56:el.id==='weaponBtn'?67:el.id==='shieldBtn'?78:el.id==='boostBtn'?89:95))+'%';el.style.top=(cfg.y??(el.id==='pauseTouchBtn'?4:68))+'%';el.style.width=(42*(cfg.size||100)/100)+'px';el.style.minWidth='0';el.style.height=(42*(cfg.size||100)/100)+'px';el.style.opacity=(cfg.opacity??90)/100;});}
 function openSettings(){show('settingsScreen');$('soundToggle').checked=gameSettings.sound;$('musicToggle').checked=gameSettings.music;$('effectsToggle').checked=gameSettings.effects;$('difficultySelect').value=gameSettings.difficulty;applyControlLayout();renderControlPreview();}
-function renderControlPreview(){const root=$('controlPreview');root.querySelectorAll('button').forEach(b=>b.remove());document.querySelectorAll('.touch button').forEach(original=>{const b=document.createElement('button');b.type='button';b.textContent=original.textContent;b.dataset.id=original.id;const cfg=gameSettings.controls[original.id]||{};b.style.left=(cfg.x??(original.id==='leftBtn'?2:original.id==='rightBtn'?11:original.id==='dashBtn'?23:original.id==='jumpBtn'?34:original.id==='attackBtn'?45:original.id==='fireBtn'?56:original.id==='weaponBtn'?67:original.id==='shieldBtn'?78:original.id==='boostBtn'?89:95))+'%';b.style.top=(cfg.y??(original.id==='pauseTouchBtn'?42:75))+'%';b.style.width=(cfg.size||100)*.38+'px';b.style.height=(cfg.size||100)*.38+'px';b.style.opacity=(cfg.opacity??90)/100;if(original.id===$('controlSelect').value)b.classList.add('selected-control');b.addEventListener('pointerdown',e=>{e.preventDefault();e.stopPropagation();$('controlSelect').value=original.id;syncControlSliders();root.querySelectorAll('button').forEach(el=>el.classList.toggle('selected-control',el.dataset.id===original.id));try{b.setPointerCapture(e.pointerId)}catch(_){}const move=ev=>{ev.preventDefault();const r=root.getBoundingClientRect(),x=Math.max(0,Math.min(96,(ev.clientX-r.left)/r.width*100)),y=Math.max(12,Math.min(80,(ev.clientY-r.top)/r.height*100));const c=gameSettings.controls[original.id]||(gameSettings.controls[original.id]={});c.x=x;c.y=y;b.style.left=x+'%';b.style.top=y+'%';applyControlLayout()};const end=()=>{b.removeEventListener('pointermove',move);b.removeEventListener('pointerup',end);b.removeEventListener('pointercancel',end);saveGameSettings()};b.addEventListener('pointermove',move);b.addEventListener('pointerup',end);b.addEventListener('pointercancel',end)});root.appendChild(b)});}
-function syncControlSliders(){const cfg=gameSettings.controls[$('controlSelect').value]||{};$('controlSize').value=cfg.size||100;$('controlOpacity').value=cfg.opacity??90;}
+
+function renderControlPreview(){
+  const root = $('controlPreview');
+  root.querySelectorAll('button').forEach(b => b.remove());
+
+  document.querySelectorAll('.touch button').forEach(original => {
+    const b = document.createElement('button');
+    b.type = 'button';
+    b.textContent = original.textContent;
+    b.dataset.id = original.id;
+
+    const cfg = gameSettings.controls[original.id] || {};
+
+    b.style.left = (cfg.x ?? (
+      original.id === 'leftBtn' ? 2 :
+      original.id === 'rightBtn' ? 11 :
+      original.id === 'dashBtn' ? 23 :
+      original.id === 'jumpBtn' ? 34 :
+      original.id === 'attackBtn' ? 45 :
+      original.id === 'fireBtn' ? 56 :
+      original.id === 'weaponBtn' ? 67 :
+      original.id === 'shieldBtn' ? 78 :
+      original.id === 'boostBtn' ? 89 : 95
+    )) + '%';
+
+    b.style.top = (cfg.y ?? (
+      original.id === 'pauseTouchBtn' ? 42 : 75
+    )) + '%';
+
+    b.style.width = (cfg.size || 100) * .38 + 'px';
+    b.style.height = (cfg.size || 100) * .38 + 'px';
+    b.style.opacity = (cfg.opacity ?? 90) / 100;
+
+    if (original.id === $('controlSelect').value) {
+      b.classList.add('selected-control');
+    }
+
+    b.addEventListener('pointerdown', e => {
+      e.preventDefault();
+      e.stopPropagation();
+
+      $('controlSelect').value = original.id;
+      syncControlSliders();
+
+      root.querySelectorAll('button').forEach(el => {
+        el.classList.toggle('selected-control', el.dataset.id === original.id);
+      });
+
+      const rect = root.getBoundingClientRect();
+      const buttonRect = b.getBoundingClientRect();
+
+      const grabX = e.clientX - buttonRect.left;
+      const grabY = e.clientY - buttonRect.top;
+
+      try {
+        b.setPointerCapture(e.pointerId);
+      } catch (_) {}
+
+      const move = ev => {
+        ev.preventDefault();
+
+        const r = root.getBoundingClientRect();
+
+        const maxX = Math.max(0, r.width - b.offsetWidth);
+        const maxY = Math.max(0, r.height - b.offsetHeight);
+
+        const px = Math.max(0, Math.min(
+          maxX, ev.clientX - r.left - grabX
+        ));
+
+        const py = Math.max(0, Math.min(
+          maxY, ev.clientY - r.top - grabY
+        ));
+
+        const x = px / r.width * 100;
+        const y = py / r.height * 100;
+
+        const c = gameSettings.controls[original.id] ||
+          (gameSettings.controls[original.id] = {});
+
+        c.x = x;
+        c.y = y;
+
+        b.style.left = x + '%';
+        b.style.top = y + '%';
+
+        applyControlLayout();
+      };
+
+      const end = () => {
+        b.removeEventListener('pointermove', move);
+        b.removeEventListener('pointerup', end);
+        b.removeEventListener('pointercancel', end);
+        saveGameSettings();
+      };
+
+      b.addEventListener('pointermove', move);
+      b.addEventListener('pointerup', end);
+      b.addEventListener('pointercancel', end);
+    });
+
+    root.appendChild(b);
+  });
+}
+
 function applySettings(){gameSettings.sound=$('soundToggle').checked;Sound.muted=!gameSettings.sound;gameSettings.music=$('musicToggle').checked;if(gameSettings.music&&!Sound.musicOn)Sound.startMusic();if(!gameSettings.music&&Sound.musicOn)Sound.stopMusic();gameSettings.effects=$('effectsToggle').checked;gameSettings.difficulty=$('difficultySelect').value;document.body.classList.toggle('low-fx',!gameSettings.effects);saveGameSettings();applyControlLayout();$('musicBtn').textContent='MUSIC: '+(gameSettings.music?'ON':'OFF');}
 function updateBest(){if(score>best){best=score;persist()}$('bestValue').textContent=best;$('menuBest').textContent=best;$('menuCoins').textContent=credits}
 function hud(){$('levelValue').textContent=level;$('orbValue').textContent=orbs.filter(o=>!o.taken).length+'/'+orbs.length;$('livesValue').textContent=lives;$('scoreValue').textContent=score;$('coinValue').textContent=credits;$('starValue').textContent=totalStars();$('menuStars').textContent=totalStars();updateBest()}
