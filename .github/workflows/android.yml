@@ -101,10 +101,28 @@ jobs:
           main.write_text(source)
           print('Landscape and immersive fullscreen enabled.')
           PY
-      - name: Increase Gradle download timeout
+
+      - name: Configure reliable Gradle download
         run: |
-          sed -i '/^networkTimeout=/d' android/gradle/wrapper/gradle-wrapper.properties
-          echo 'networkTimeout=120000' >> android/gradle/wrapper/gradle-wrapper.properties
+          python3 - <<'PY'
+          from pathlib import Path
+
+          p = Path('android/gradle/wrapper/gradle-wrapper.properties')
+          lines = p.read_text().splitlines()
+
+          url = 'distributionUrl=https\\://downloads.gradle.org/distributions/gradle-8.11.1-bin.zip'
+          lines = [url if line.startswith('distributionUrl=') else line for line in lines]
+
+          if not any(line.startswith('distributionUrl=') for line in lines):
+              raise SystemExit('Gradle distributionUrl was not found')
+
+          lines = [line for line in lines if not line.startswith('networkTimeout=')]
+          lines.append('networkTimeout=120000')
+
+          p.write_text('\n'.join(lines) + '\n')
+          print('Gradle download configured successfully.')
+          PY
+
           
       - name: Build debug APK
         run: |
