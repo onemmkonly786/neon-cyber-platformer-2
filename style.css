@@ -32,3 +32,10 @@ footer{display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap;margin-
 .touch{flex-wrap:wrap;padding:0 5px}.touch button{min-width:42px}.touch button#boostBtn{border-color:#ffe66d;color:#ffe66d}
 #musicBtn{border-color:#7cff9b;color:#7cff9b}
 @media(max-width:700px),(pointer:coarse){.touch{max-width:100%;row-gap:4px}.touch button{min-width:36px;min-height:40px;font-size:8px}.stage{margin-bottom:3px}}
+
+/* PERSONAL SETTINGS + TOUCH LAYOUT EDITOR */
+.settings-panel{width:min(100%,620px);max-height:96%;text-align:left}.settings-panel h2{text-align:center}.setting-row{display:flex;align-items:center;justify-content:space-between;padding:9px 12px;margin:6px 0;border:1px solid #28506b;border-radius:8px;background:#0a1930;color:#cceaff;font:700 11px monospace}.setting-row input{width:22px;height:22px;accent-color:#35f4ff}.setting-row select,.custom-tools select{background:#0c2036;color:#35f4ff;border:1px solid #35f4ff99;border-radius:6px;padding:8px;font:700 10px monospace}.custom-tools{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:10px 0}.custom-tools label{display:flex;flex-direction:column;gap:6px;color:#a9c5dc;font:700 9px monospace}.custom-tools input{width:100%;accent-color:#35f4ff}.control-preview{position:relative;height:145px;border:1px dashed #35f4ff99;border-radius:10px;background:linear-gradient(135deg,#09172b,#14213c);overflow:hidden;margin:12px 0;touch-action:none}.control-preview>span{position:absolute;top:8px;left:0;right:0;text-align:center;color:#7b9ab8;font:9px monospace;pointer-events:none}.control-preview button{position:absolute;margin:0;min-width:0;min-height:0;padding:8px;border-radius:50%;font-size:9px;touch-action:none;user-select:none;transform:none!important}.control-preview button.selected-control{outline:2px solid #ffe66d;box-shadow:0 0 15px #ffe66d}.touch.customizing{display:block!important;pointer-events:none!important;opacity:.15}.low-fx canvas{filter:saturate(.75)}
+
+@media(max-width:700px),(pointer:coarse){.touch{height:100%;top:0;bottom:0;left:0;right:0;display:block;pointer-events:none}.touch button{position:absolute}}
+
+.overlay{z-index:10}.touch{z-index:5}
