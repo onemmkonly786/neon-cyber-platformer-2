@@ -48,6 +48,60 @@ jobs:
       - name: Sync Capacitor Android project
         run: npx cap sync android
 
+      - name: Set Android app to landscape and immersive fullscreen
+        shell: bash
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          import xml.etree.ElementTree as ET
+
+          android = Path('android/app/src/main')
+          manifest = android / 'AndroidManifest.xml'
+          ns = {'android': 'http://schemas.android.com/apk/res/android'}
+          ET.register_namespace('android', ns['android'])
+          tree = ET.parse(manifest)
+          root = tree.getroot()
+          app = root.find('application')
+          activity = app.find('activity')
+          if activity is None:
+              raise SystemExit('Main activity was not found in AndroidManifest.xml')
+          activity.set('{%s}screenOrientation' % ns['android'], 'landscape')
+          tree.write(manifest, encoding='utf-8', xml_declaration=True)
+
+          # Hide the status bar through the app theme as well.
+          values = android / 'res/values'
+          values.mkdir(parents=True, exist_ok=True)
+          styles = values / 'styles.xml'
+          if styles.exists():
+              st = ET.parse(styles)
+              sr = st.getroot()
+              style = None
+              for item in sr.findall('style'):
+                  if item.get('name') in ('AppTheme.NoActionBar', 'AppTheme'):
+                      style = item
+                      break
+              if style is None:
+                  style = ET.SubElement(sr, 'style', {'name': 'AppTheme.NoActionBar'})
+              ET.SubElement(style, 'item', {'name': 'android:windowFullscreen'}).text = 'true'
+              st.write(styles, encoding='utf-8', xml_declaration=True)
+
+          # Enable immersive sticky mode so Android navigation/status bars stay hidden during play.
+          candidates = list((android / 'java').rglob('MainActivity.java')) + list((android / 'kotlin').rglob('MainActivity.kt'))
+          if not candidates:
+              raise SystemExit('Could not find generated MainActivity source file')
+          main = candidates[0]
+          source = main.read_text()
+          method = '''\n    @Override\n    public void onWindowFocusChanged(boolean hasFocus) {\n        super.onWindowFocusChanged(hasFocus);\n        if (hasFocus) {\n            getWindow().getDecorView().setSystemUiVisibility(\n                android.view.View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY\n                | android.view.View.SYSTEM_UI_FLAG_LAYOUT_STABLE\n                | android.view.View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION\n                | android.view.View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN\n                | android.view.View.SYSTEM_UI_FLAG_HIDE_NAVIGATION\n                | android.view.View.SYSTEM_UI_FLAG_FULLSCREEN\n            );\n        }\n    }\n'''
+          if main.suffix == '.java':
+              if 'onWindowFocusChanged(boolean hasFocus)' not in source:
+                  pos = source.rfind('}')
+                  source = source[:pos] + method + source[pos:]
+          else:
+              raise SystemExit('Unexpected Kotlin MainActivity; workflow expects generated Java activity')
+          main.write_text(source)
+          print('Landscape and immersive fullscreen enabled.')
+          PY
+
       - name: Build debug APK
         run: |
           cd android
@@ -57,6 +111,6 @@ jobs:
       - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
-          name: Neon-Cyber-Platformer-APK
+          name: Neon-Cyber-Platformer-APK-Landscape
           path: android/app/build/outputs/apk/debug/app-debug.apk
           if-no-files-found: error
