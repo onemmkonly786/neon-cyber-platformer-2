@@ -53,9 +53,14 @@ function isBossLevel(n){return [10,20,30,40,50].includes(n)}
 function persist(){try{save.credits=credits;save.best=best;save.totalStars=totalStars();localStorage.setItem(STORE,JSON.stringify(save))}catch(e){}}
 function rewardKill(x,y,color='#35f4ff'){credits+=5;save.totalCoins=(save.totalCoins||0)+5;destroyedThisLevel++;fx.burst(x,y,color,14);persist()}
 function defeatBoss(){if(!boss)return;const defeated=boss.type,x=boss.x+boss.w/2,y=boss.y+boss.h/2;boss=null;destroyedThisLevel++;save.bossesDefeated=save.bossesDefeated||[];if(!save.bossesDefeated.includes(level))save.bossesDefeated.push(level);score+=1500;credits+=20;save.totalCoins=(save.totalCoins||0)+20;const reward=weapons[defeated-1];if(reward&&!save.unlockedWeapons.includes(reward.id)){save.unlockedWeapons.push(reward.id);selectedWeapon=save.unlockedWeapons.length-1;lastBossReward=reward.name;fx.burst(x,y,reward.color,48);}fx.burst(x,y,'#ff4fe1',36);persist();hud()}
-
-function show(id){['menuScreen','levelSelectScreen','pauseScreen','infoScreen','endScreen','shopScreen','settingsScreen'].forEach(s=>$(s).classList.toggle('hidden',s!==id))}
 function applyControlLayout(){document.querySelectorAll('.touch button').forEach(el=>{const cfg=gameSettings.controls[el.id]||{};el.style.position='absolute';el.style.left=(cfg.x??(el.id==='leftBtn'?2:el.id==='rightBtn'?11:el.id==='dashBtn'?23:el.id==='jumpBtn'?34:el.id==='attackBtn'?45:el.id==='fireBtn'?56:el.id==='weaponBtn'?67:el.id==='shieldBtn'?78:el.id==='boostBtn'?89:95))+'%';el.style.top=(cfg.y??(el.id==='pauseTouchBtn'?4:68))+'%';el.style.width=(42*(cfg.size||100)/100)+'px';el.style.minWidth='0';el.style.height=(42*(cfg.size||100)/100)+'px';el.style.opacity=(cfg.opacity??90)/100;});}
+function syncControlSliders(){
+  const id = $('controlSelect').value;
+  const cfg = gameSettings.controls[id] || {};
+
+  $('controlSize').value = cfg.size ?? 100;
+  $('controlOpacity').value = cfg.opacity ?? 90;
+}      
 function openSettings(){show('settingsScreen');$('soundToggle').checked=gameSettings.sound;$('musicToggle').checked=gameSettings.music;$('effectsToggle').checked=gameSettings.effects;$('difficultySelect').value=gameSettings.difficulty;applyControlLayout();renderControlPreview();}
 
 function renderControlPreview(){
