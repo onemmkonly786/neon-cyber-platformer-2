@@ -39,4 +39,3 @@ footer{display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap;margin-
 @media(max-width:700px),(pointer:coarse){.touch{height:100%;top:0;bottom:0;left:0;right:0;display:block;pointer-events:none}.touch button{position:absolute}}
 
 .overlay{z-index:10}.touch{z-index:5}
-
