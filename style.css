@@ -37,3 +37,34 @@ footer{display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap;margin-
 .touch.customizing{display:block!important;pointer-events:none!important;opacity:.15}.low-fx canvas{filter:saturate(.75)}
 @media(max-width:700px),(pointer:coarse){.touch{height:100%;top:0;bottom:0;left:0;right:0;display:block;pointer-events:none;z-index:5}.touch button{position:absolute;pointer-events:auto}}
 .overlay{z-index:10}.touch{z-index:5}
+
+
+/* APP MODE: prevent page scrolling and use the full phone screen */
+html,body{width:100%;height:100%;margin:0;overflow:hidden;overscroll-behavior:none;}
+body{padding:0;min-height:100%;align-items:stretch;justify-content:stretch;touch-action:pan-x pan-y;}
+.shell{width:100%;height:100%;max-width:none;display:flex;flex-direction:column;min-height:0;}
+.stage{flex:1 1 auto;min-height:0;width:100%;height:100%;border-radius:0;border-left:0;border-right:0;display:flex;align-items:center;justify-content:center;}
+.stage canvas{width:100%;height:100%;object-fit:contain;}
+.control-preview{height:clamp(320px,52vh,460px);min-height:320px;}
+.control-preview button{min-width:54px;min-height:54px;font-size:10px;will-change:left,top;}
+.control-preview button:active{filter:brightness(1.25);}
+@media(max-width:700px),(pointer:coarse){
+ body{padding:0;align-items:stretch;}
+ header,footer{display:none!important;}
+ .shell{height:100dvh;height:100vh;}
+ .stage{height:100%;min-height:0;border-radius:0;border:0;box-shadow:none;}
+ .stage canvas{width:100%;height:100%;object-fit:contain;}
+ .touch{height:100%;top:0;bottom:0;left:0;right:0;padding:0;}
+ .touch button{min-width:54px;min-height:54px;font-size:10px;padding:10px 8px;border-radius:14px;box-shadow:0 3px 14px #0008;}
+ .touch button#leftBtn,.touch button#rightBtn{font-size:18px;}
+ .overlay{padding:max(10px,env(safe-area-inset-top)) 10px max(10px,env(safe-area-inset-bottom));}
+ .settings-panel{max-height:94%;}
+ .control-preview{height:clamp(300px,45vh,420px);min-height:300px;}
+}
+@media(max-height:520px) and (orientation:landscape){
+ .control-preview{height:260px;min-height:240px;}
+ .settings-panel{max-height:96%;padding:12px;}
+ .settings-panel h2{font-size:26px;margin:6px;}
+ .settings-panel .suit-heading{margin:8px 0 5px;}
+ .settings-panel p{margin:6px 0;font-size:10px;}
+}

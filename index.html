@@ -2,9 +2,12 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
 <meta name="theme-color" content="#070b18">
 <meta name="description" content="Neon Cyber Platformer — collect energy, unlock upgrades, and save Cyber City.">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <title>Neon Cyber Platformer</title>
 <link rel="stylesheet" href="style.css">
 </head>
@@ -13,74 +16,31 @@
   <header>
     <div class="brand">◆ NEON <b>CYBER</b><small>PLATFORMER</small></div>
     <div class="hud">
-      <span>LVL <b id="levelValue">1</b>/50</span>
-      <span>ORBS <b id="orbValue">0/0</b></span>
-      <span>COINS <b id="coinValue">0</b></span>
-      <span>⭐ <b id="starValue">0</b></span>
-      <span>♥ <b id="livesValue">3</b></span>
-      <span>SCORE <b id="scoreValue">0</b></span>
-      <span>BEST <b id="bestValue">0</b></span>
+      <span>LVL <b id="levelValue">1</b>/50</span><span>ORBS <b id="orbValue">0/0</b></span><span>COINS <b id="coinValue">0</b></span><span>⭐ <b id="starValue">0</b></span><span>♥ <b id="livesValue">3</b></span><span>SCORE <b id="scoreValue">0</b></span><span>BEST <b id="bestValue">0</b></span>
     </div>
   </header>
   <section class="stage">
     <canvas id="gameCanvas" width="900" height="540" aria-label="Neon Cyber Uprising platform game"></canvas>
-    <section id="menuScreen" class="overlay">
-      <div class="panel hero">
-        <small>THE CITY NEEDS A HERO</small>
-        <h1>NEON <em>CYBER</em><br>PLATFORMER</h1>
-        <p>Fight through 50 sectors across five worlds. Earn up to 3 stars per sector, unlock five boss battles, and save Cyber City.</p>
-        <div class="button-row"><button id="continueBtn" class="primary">CONTINUE</button><button id="playBtn" class="primary">NEW GAME</button></div>
-        <div class="button-row"><button id="levelSelectBtn">CHOOSE LEVEL</button><button id="shopBtn">UPGRADE LAB</button><button id="howBtn">HOW TO PLAY</button><button id="settingsBtn">SETTINGS & CONTROLS</button><button id="musicBtn">MUSIC: OFF</button></div>
-        <p class="bestline">PERSONAL BEST <b id="menuBest">0</b> <span>·</span> <b id="menuCoins">0</b> CREDITS <span>·</span> ⭐ <b id="menuStars">0</b> STARS</p>
-      </div>
-    </section>
-    <section id="levelSelectScreen" class="overlay hidden"><div class="panel level-panel">
-      <small>JUMP INTO ANY SECTOR</small><h2>CHOOSE LEVEL</h2>
-      <p>Choose from 50 sectors. Boss fights at levels 10, 20, 30, 40 and 50 require 15, 30, 45, 60 and 75 stars.</p>
-      <div id="levelButtons" class="level-grid"></div>
-      <button id="levelSelectBackBtn" class="primary">BACK TO MENU</button>
+    <section id="menuScreen" class="overlay"><div class="panel hero">
+      <small>THE CITY NEEDS A HERO</small><h1>NEON <em>CYBER</em><br>PLATFORMER</h1>
+      <p>Fight through 50 sectors across five worlds. Earn up to 3 stars per sector, unlock five boss battles, and save Cyber City.</p>
+      <div class="button-row"><button id="continueBtn" class="primary">CONTINUE</button><button id="playBtn" class="primary">NEW GAME</button></div>
+      <div class="button-row"><button id="levelSelectBtn">CHOOSE LEVEL</button><button id="shopBtn">UPGRADE LAB</button><button id="howBtn">HOW TO PLAY</button><button id="settingsBtn">SETTINGS &amp; CONTROLS</button><button id="musicBtn">MUSIC: OFF</button></div>
+      <p class="bestline">PERSONAL BEST <b id="menuBest">0</b> <span>·</span> <b id="menuCoins">0</b> CREDITS <span>·</span> ⭐ <b id="menuStars">0</b> STARS</p>
     </div></section>
-  <section id="pauseScreen" class="overlay hidden"><div class="panel">
-      <small>MISSION SUSPENDED</small><h2>PAUSED</h2>
-      <button id="resumeBtn" class="primary">RESUME</button>
-      <div class="button-row"><button id="restartBtn">RESTART SECTOR</button><button id="quitBtn">MAIN MENU</button></div>
-    </div></section>
-    <section id="infoScreen" class="overlay hidden"><div class="panel">
-      <small>FIELD MANUAL</small><h2>HOW TO PLAY</h2>
-      <p class="left"><b>Move:</b> A/D or ←/→<br><b>Jump:</b> W / ↑ / SPACE (double jump!)<br><b>Dash:</b> SHIFT (uses energy)<br><b>Nova Pulse:</b> E (permanently destroys nearby normal enemies for this sector)<br><b>Weapon fire:</b> F (weapons are earned from bosses); <b>Cycle weapon:</b> Z<br><b>Shield:</b> Q (temporary protection)<br><b>Overdrive:</b> G (temporary speed boost)<br><b>Pause:</b> P or ESC</p>
-      <p class="left">Collect every orb to unlock the exit. Earn 1 star for clearing a sector, 1 extra for collecting every coin, and 1 extra for destroying every enemy and hazard. Grab credits, activate checkpoints, and use the Upgrade Lab between runs. New seeker drones appear in later sectors. Use F to shoot them or E to clear nearby threats. Press G for Overdrive. Touch controls are available on phones.</p>
-      <button id="backBtn" class="primary">BACK</button>
-    </div></section>
-    <section id="shopScreen" class="overlay hidden"><div class="panel shop-panel">
-      <small>NEON TECH DIVISION</small><h2>UPGRADE LAB</h2>
-      <p>Credits: <b id="shopCoins">0</b> · Permanent upgrades are saved on this device.</p>
-      <h3 class="suit-heading">CHOOSE YOUR SUIT</h3><div id="suitPicker" class="suit-picker"></div><div id="shopItems" class="shop-items"></div>
-      <div class="button-row"><button id="shopBackBtn" class="primary">BACK TO MENU</button><button id="resetSaveBtn">RESET SAVE</button></div>
-    </div></section>
-    <section id="settingsScreen" class="overlay hidden"><div class="panel settings-panel">
-      <small>PERSONALIZE YOUR EXPERIENCE</small><h2>SETTINGS</h2>
-      <div class="setting-row"><label for="soundToggle">SOUND EFFECTS</label><input id="soundToggle" type="checkbox" checked></div>
-      <div class="setting-row"><label for="musicToggle">BACKGROUND MUSIC</label><input id="musicToggle" type="checkbox"></div>
-      <div class="setting-row"><label for="effectsToggle">VISUAL EFFECTS</label><input id="effectsToggle" type="checkbox" checked></div>
+    <section id="levelSelectScreen" class="overlay hidden"><div class="panel level-panel"><small>JUMP INTO ANY SECTOR</small><h2>CHOOSE LEVEL</h2><p>Choose from 50 sectors. Boss fights at levels 10, 20, 30, 40 and 50 require 15, 30, 45, 60 and 75 stars.</p><div id="levelButtons" class="level-grid"></div><button id="levelSelectBackBtn" class="primary">BACK TO MENU</button></div></section>
+    <section id="pauseScreen" class="overlay hidden"><div class="panel"><small>MISSION SUSPENDED</small><h2>PAUSED</h2><button id="resumeBtn" class="primary">RESUME</button><div class="button-row"><button id="restartBtn">RESTART SECTOR</button><button id="quitBtn">MAIN MENU</button></div></div></section>
+    <section id="infoScreen" class="overlay hidden"><div class="panel"><small>FIELD MANUAL</small><h2>HOW TO PLAY</h2><p class="left"><b>Move:</b> A/D or ←/→<br><b>Jump:</b> W / ↑ / SPACE (double jump!)<br><b>Dash:</b> SHIFT (uses energy)<br><b>Nova Pulse:</b> E (permanently destroys nearby normal enemies for this sector)<br><b>Weapon fire:</b> F (weapons are earned from bosses); <b>Cycle weapon:</b> Z<br><b>Shield:</b> Q (temporary protection)<br><b>Overdrive:</b> G (temporary speed boost)<br><b>Pause:</b> P or ESC</p><p class="left">Collect every orb to unlock the exit. Earn 1 star for clearing a sector, 1 extra for collecting every coin, and 1 extra for destroying every enemy and hazard. Grab credits, activate checkpoints, and use the Upgrade Lab between runs. New seeker drones appear in later sectors. Use F to shoot them or E to clear nearby threats. Press G for Overdrive. Touch controls are available on phones.</p><button id="backBtn" class="primary">BACK</button></div></section>
+    <section id="shopScreen" class="overlay hidden"><div class="panel shop-panel"><small>NEON TECH DIVISION</small><h2>UPGRADE LAB</h2><p>Credits: <b id="shopCoins">0</b> · Permanent upgrades are saved on this device.</p><h3 class="suit-heading">CHOOSE YOUR SUIT</h3><div id="suitPicker" class="suit-picker"></div><div id="shopItems" class="shop-items"></div><div class="button-row"><button id="shopBackBtn" class="primary">BACK TO MENU</button><button id="resetSaveBtn">RESET SAVE</button></div></div></section>
+    <section id="settingsScreen" class="overlay hidden"><div class="panel settings-panel"><small>PERSONALIZE YOUR EXPERIENCE</small><h2>SETTINGS</h2>
+      <div class="setting-row"><label for="soundToggle">SOUND EFFECTS</label><input id="soundToggle" type="checkbox" checked></div><div class="setting-row"><label for="musicToggle">BACKGROUND MUSIC</label><input id="musicToggle" type="checkbox"></div><div class="setting-row"><label for="effectsToggle">VISUAL EFFECTS</label><input id="effectsToggle" type="checkbox" checked></div>
       <div class="setting-row"><label for="difficultySelect">DIFFICULTY</label><select id="difficultySelect"><option value="easy">EASY</option><option value="normal" selected>NORMAL</option><option value="hard">HARD</option></select></div>
-      <h3 class="suit-heading">TOUCH CONTROL CUSTOMIZER</h3>
-      <p class="left">Choose a button, change its size, then drag it around the preview. Your layout is saved on this device. Difficulty changes your starting lives: Easy 10, Normal 7, Hard 4.</p>
-      <div class="custom-tools"><select id="controlSelect"><option value="leftBtn">MOVE LEFT</option><option value="rightBtn">MOVE RIGHT</option><option value="jumpBtn">JUMP</option><option value="dashBtn">DASH</option><option value="attackBtn">PULSE</option><option value="fireBtn">FIRE</option><option value="weaponBtn">WEAPON</option><option value="shieldBtn">SHIELD</option><option value="boostBtn">BOOST</option><option value="pauseTouchBtn">PAUSE</option></select>
-      <label>BUTTON SIZE <input id="controlSize" type="range" min="70" max="160" value="100"></label>
-      <label>BUTTON OPACITY <input id="controlOpacity" type="range" min="35" max="100" value="90"></label></div>
-      <div id="controlPreview" class="control-preview"><span>DRAG BUTTONS TO MOVE THEM</span></div>
-      <div class="button-row"><button id="resetControlsBtn">RESET LAYOUT</button><button id="settingsBackBtn" class="primary">SAVE & BACK</button></div>
+      <h3 class="suit-heading">TOUCH CONTROL CUSTOMIZER</h3><p class="left">Choose a button, change its size, then drag it around the preview. Your layout is saved on this device. Difficulty changes your starting lives: Easy 10, Normal 7, Hard 4.</p>
+      <div class="custom-tools"><select id="controlSelect"><option value="leftBtn">MOVE LEFT</option><option value="rightBtn">MOVE RIGHT</option><option value="jumpBtn">JUMP</option><option value="dashBtn">DASH</option><option value="attackBtn">PULSE</option><option value="fireBtn">FIRE</option><option value="weaponBtn">WEAPON</option><option value="shieldBtn">SHIELD</option><option value="boostBtn">BOOST</option><option value="pauseTouchBtn">PAUSE</option></select><label>BUTTON SIZE <input id="controlSize" type="range" min="70" max="160" value="100"></label><label>BUTTON OPACITY <input id="controlOpacity" type="range" min="35" max="100" value="90"></label></div>
+      <div id="controlPreview" class="control-preview"><span>DRAG BUTTONS TO MOVE THEM</span></div><div class="button-row"><button id="resetControlsBtn">RESET LAYOUT</button><button id="settingsBackBtn" class="primary">SAVE &amp; BACK</button></div>
     </div></section>
-    <section id="endScreen" class="overlay hidden"><div class="panel">
-      <small id="endEyebrow">SECTOR CLEARED</small><h2 id="endTitle">NICE WORK!</h2>
-      <p id="endText"></p>
-      <button id="nextBtn" class="primary">NEXT SECTOR</button>
-      <button id="endMenuBtn">MAIN MENU</button>
-    </div></section>
-    <div class="touch">
-      <button id="leftBtn" aria-label="Move left">◀</button><button id="rightBtn" aria-label="Move right">▶</button>
-      <button id="dashBtn">DASH</button><button id="jumpBtn">JUMP</button><button id="attackBtn">PULSE</button><button id="fireBtn">FIRE</button><button id="weaponBtn">WEAPON</button><button id="shieldBtn">SHIELD</button><button id="boostBtn">BOOST</button><button id="pauseTouchBtn">Ⅱ</button>
-    </div>
+    <section id="endScreen" class="overlay hidden"><div class="panel"><small id="endEyebrow">SECTOR CLEARED</small><h2 id="endTitle">NICE WORK!</h2><p id="endText"></p><button id="nextBtn" class="primary">NEXT SECTOR</button><button id="endMenuBtn">MAIN MENU</button></div></section>
+    <div class="touch"><button id="leftBtn" aria-label="Move left">◀</button><button id="rightBtn" aria-label="Move right">▶</button><button id="dashBtn">DASH</button><button id="jumpBtn">JUMP</button><button id="attackBtn">PULSE</button><button id="fireBtn">FIRE</button><button id="weaponBtn">WEAPON</button><button id="shieldBtn">SHIELD</button><button id="boostBtn">BOOST</button><button id="pauseTouchBtn">Ⅱ</button></div>
   </section>
   <footer><span>MOVE · DOUBLE JUMP · DASH · PULSE · WEAPON FIRE · SHIELD</span><span>10 SECTORS · UPGRADES · CHECKPOINTS · CORE BOSS</span></footer>
 </main>
